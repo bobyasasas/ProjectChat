@@ -1,10 +1,11 @@
 import sys
 
-from PySide6 import QtCore
 from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QApplication, QWidget, QListWidgetItem
 from qfluentwidgets import NavigationItemPosition, FluentWindow, SubtitleLabel, setFont
 from qfluentwidgets import FluentIcon as FIF
+
+from dialog import CustomMessageBox
 from ui_contacts import Ui_Contacts_Form
 
 
@@ -20,6 +21,12 @@ class Contacts(QWidget, Ui_Contacts_Form):
             item = QListWidgetItem(stand)
             item.setIcon(QIcon(':/qfluentwidgets/images/logo.png'))
             self.listWidget.addItem(item)
+        self.pushButton_add_contact.clicked.connect(self.showDialog_add_contact)
+
+    def showDialog_add_contact(self):
+        dialog = CustomMessageBox(self)
+        if dialog.exec():
+            print(dialog.urlLineEdit.text())
 
 
 class Widget(QFrame):
@@ -37,7 +44,7 @@ class Widget(QFrame):
         self.setObjectName(text.replace(' ', '-'))
 
 
-class Window(FluentWindow):
+class MainInterface(FluentWindow):
     """ 主界面 """
 
     def __init__(self):
@@ -66,8 +73,9 @@ class Window(FluentWindow):
         self.setWindowTitle('Kchat')
 
 
-if __name__ == '__main__':
+if __name__ == ('__mai'
+                'n__'):
     app = QApplication(sys.argv)
-    w = Window()
+    w = MainInterface()
     w.show()
     app.exec()

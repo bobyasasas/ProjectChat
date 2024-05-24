@@ -1,13 +1,10 @@
-import sys
-
-from PySide6 import QtWidgets
 from PySide6.QtWidgets import QWidget
 from qfluentwidgets import MessageBox
 import myUtil.Post
 from ui_login import Ui_login_window
 
 
-class MyWindow(QWidget, Ui_login_window):
+class LoginWindow(QWidget, Ui_login_window):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -26,12 +23,7 @@ class MyWindow(QWidget, Ui_login_window):
             }
             if myUtil.Post.get_post("http://127.0.0.1:8080/chat/post/login", json):
                 MessageBox("注册成功", "欢迎注册，" + username, self).show()
+                return True, username
             else:
                 MessageBox("注册失败", "该用户已注册", self).show()
-
-
-if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    window = MyWindow()
-    window.show()
-    app.exec()
+                return False,username
