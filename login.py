@@ -21,7 +21,7 @@ class LoginWindow(QWidget, Ui_login_window):
                 'username': username,
                 'passwd': passwd
             }
-            if myUtil.Post.get_post("http://127.0.0.1:8080/chat/post/login", json):
+            if myUtil.Post.get_post("http://119.188.240.140:22255/chat/post/login", json):
                 MessageBox("注册成功", "欢迎注册，" + username, self).show()
                 return True, username
             else:

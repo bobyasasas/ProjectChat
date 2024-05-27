@@ -1,3 +1,5 @@
+import sys
+
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget
 from qfluentwidgets import MessageBox
@@ -48,7 +50,7 @@ class MainWindow(QMainWindow):
             'username': username,
             'passwd': passwd
         }
-        if myUtil.Post.get_post("http://127.0.0.1:8080/chat/post/signin", json):
+        if myUtil.Post.get_post("http://119.188.240.140:22255/chat/post/signin", json):
             MessageBox("登录成功", "欢迎登录，" + username, self).show()
             self.login_success()
         else:
@@ -58,4 +60,4 @@ class MainWindow(QMainWindow):
 app = QApplication([])
 window = MainWindow()
 window.show()
-app.exec()
+sys.exit(app.exec())
