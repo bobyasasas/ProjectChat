@@ -1,6 +1,7 @@
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget
-
+from qfluentwidgets import MessageBox
+import myUtil.Post
 from login import LoginWindow
 from main_interface import MainInterface
 from signin import SigninWindow
@@ -12,10 +13,13 @@ class MainWindow(QMainWindow):
 
         self.stackedWidget = QStackedWidget()
 
+        self.main = MainInterface()
+
         self.login_interface = LoginWindow()
         self.login_interface.pushButton_signin.clicked.connect(self.on_go_to_sign_interface)
 
         self.sign_interface = SigninWindow()
+        self.sign_interface.pushButton_signin.clicked.connect(self.signin)
         self.sign_interface.pushButton_login.clicked.connect(self.on_go_to_login_interface)
 
         self.stackedWidget.addWidget(self.sign_interface)
@@ -33,9 +37,22 @@ class MainWindow(QMainWindow):
         self.stackedWidget.setCurrentIndex(0)
 
     def login_success(self):
-        main = MainInterface()
-        main.show()
+        self.resize(0, 0)
+        self.stackedWidget.close()
+        self.main.show()
 
+    def signin(self):
+        username = self.sign_interface.lineEdit_username.text()
+        passwd = self.sign_interface.lineEdit_passwd.text()
+        json = {
+            'username': username,
+            'passwd': passwd
+        }
+        if myUtil.Post.get_post("http://127.0.0.1:8080/chat/post/signin", json):
+            MessageBox("登录成功", "欢迎登录，" + username, self).show()
+            self.login_success()
+        else:
+            MessageBox("登录失败", "用户名或者密码错误。", self).show()
 
 
 app = QApplication([])

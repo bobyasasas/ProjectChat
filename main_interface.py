@@ -1,5 +1,6 @@
 import sys
 
+from PySide6 import QtCore
 from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QApplication, QWidget, QListWidgetItem
 from qfluentwidgets import NavigationItemPosition, FluentWindow, SubtitleLabel, setFont
@@ -56,7 +57,6 @@ class MainInterface(FluentWindow):
         self.transmitInterface = Widget('transmit Interface', self)
         self.analyzeInterface = Widget('analyze Interface', self)
         self.profileInterface = Widget('profile Interface', self)
-
         self.initNavigation()
         self.initWindow()
 
@@ -71,11 +71,3 @@ class MainInterface(FluentWindow):
         self.resize(900, 600)
         self.setWindowIcon(QIcon(':/qfluentwidgets/images/logo.png'))
         self.setWindowTitle('Kchat')
-
-
-if __name__ == ('__mai'
-                'n__'):
-    app = QApplication(sys.argv)
-    w = MainInterface()
-    w.show()
-    app.exec()
