@@ -156,20 +156,20 @@ class Ui_signin_window(object):
 
     def retranslateUi(self, signin_window):
         signin_window.setWindowTitle(QCoreApplication.translate("signin_window", u"\u767b\u5f55", None))
-        self.label.setText(QCoreApplication.translate("signin_window", u"\u767b\u5f55", None))
+        self.label.setText(QCoreApplication.translate("signin_window", u"SIGN", None))
 #if QT_CONFIG(tooltip)
-        self.lineEdit_username.setToolTip(QCoreApplication.translate("signin_window", u"\u8bf7\u8f93\u5165\u8d26\u53f7", None))
+        self.lineEdit_username.setToolTip(QCoreApplication.translate("signin_window", u"please enter username", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(statustip)
         self.lineEdit_username.setStatusTip("")
 #endif // QT_CONFIG(statustip)
         self.lineEdit_username.setInputMask("")
         self.lineEdit_username.setText("")
-        self.lineEdit_username.setPlaceholderText(QCoreApplication.translate("signin_window", u"\u8bf7\u8f93\u5165\u8d26\u53f7", None))
+        self.lineEdit_username.setPlaceholderText(QCoreApplication.translate("signin_window", u"enter username", None))
         self.lineEdit_passwd.setText("")
-        self.lineEdit_passwd.setPlaceholderText(QCoreApplication.translate("signin_window", u"\u8bf7\u8f93\u5165\u5bc6\u7801", None))
-        self.pushButton_signin.setText(QCoreApplication.translate("signin_window", u"\u767b\u5f55", None))
-        self.pushButton_login.setText(QCoreApplication.translate("signin_window", u"\u73b0\u5728\u6ce8\u518c", None))
-        self.pushButton_forget.setText(QCoreApplication.translate("signin_window", u"\u5fd8\u8bb0\u5bc6\u7801?", None))
+        self.lineEdit_passwd.setPlaceholderText(QCoreApplication.translate("signin_window", u"enter password", None))
+        self.pushButton_signin.setText(QCoreApplication.translate("signin_window", u"sign in", None))
+        self.pushButton_login.setText(QCoreApplication.translate("signin_window", u"register now", None))
+        self.pushButton_forget.setText(QCoreApplication.translate("signin_window", u"forget\uff1f", None))
     # retranslateUi
 

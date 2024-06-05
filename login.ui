@@ -37,7 +37,7 @@
              </font>
             </property>
             <property name="text">
-             <string>注册</string>
+             <string>LOGIN</string>
             </property>
            </widget>
           </item>
@@ -134,7 +134,7 @@
              <string/>
             </property>
             <property name="placeholderText">
-             <string>请输入账号</string>
+             <string>enter username</string>
             </property>
            </widget>
           </item>
@@ -183,7 +183,7 @@
              <enum>QLineEdit::EchoMode::Password</enum>
             </property>
             <property name="placeholderText">
-             <string>请输入密码</string>
+             <string>enter password</string>
             </property>
            </widget>
           </item>
