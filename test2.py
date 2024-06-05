@@ -30,7 +30,6 @@ class MainWindow(QMainWindow):
             if item.text() == text:
                 # 设置前景颜色
                 item.setForeground(QBrush(color))
-                item.setBackground(QBrush(color))
 
 
 def main():

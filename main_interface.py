@@ -1,7 +1,7 @@
 import json
 
 import requests
-from PySide6.QtCore import Slot, QStandardPaths
+from PySide6.QtCore import Slot, QStandardPaths, QThread, Signal
 from PySide6.QtGui import QIcon, Qt, QBrush, QColor
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QWidget, QListWidgetItem, QFileDialog
 from qfluentwidgets import NavigationItemPosition, FluentWindow, SubtitleLabel, setFont, MessageBox
@@ -86,6 +86,28 @@ class FileListItem(QListWidgetItem):
         super().__init__()
         self.filename = filename
         self.filesize = filesize
+
+
+class CheckThread(QThread):
+    message_received = Signal(list)
+
+    def __init__(self, username):
+        super().__init__()
+        self.username = username
+
+    def run(self):
+        # 假设这个方法会周期性地检查新消息
+        while True:
+            # 这里使用 QThread.sleep 来暂停线程，避免无限循环过快执行
+            QThread.sleep(10)
+            input_json = {
+                "username": self.username
+            }
+            # 假设 Post.get_contracts 是一个有效的网络请求
+            new_message_name = Post.get_contracts("http://119.188.240.140:22255/chat/post/check_message", input_json)
+            if new_message_name:
+                self.message_received.emit(new_message_name)  # 发出信号传递消息
+                print("Message received from:", new_message_name)  # 打印接收到的消息
 
 
 class File(QWidget, Ui_FILE):
