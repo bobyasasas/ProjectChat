@@ -45,10 +45,10 @@ class MainWindow(QMainWindow):
     def on_go_to_sign_interface(self):
         self.stackedWidget.setCurrentIndex(0)
 
-    def login_success(self,username):
+    def login_success(self, username):
         self.resize(0, 0)
         self.stackedWidget.close()
-        main = Main(self,username)
+        main = Main(self, username)
         main.show()
 
     def signin(self):

@@ -2,7 +2,7 @@ import json
 
 import requests
 from PySide6.QtCore import Slot, QStandardPaths
-from PySide6.QtGui import QIcon, Qt
+from PySide6.QtGui import QIcon, Qt, QBrush, QColor
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QWidget, QListWidgetItem, QFileDialog
 from qfluentwidgets import NavigationItemPosition, FluentWindow, SubtitleLabel, setFont, MessageBox
 from qfluentwidgets import FluentIcon as FIF
@@ -16,7 +16,7 @@ from ui_contacts import Ui_Contacts_Form
 from ui_file import Ui_FILE
 
 
-def add_contacts(add_name,username):
+def add_contacts(add_name, username):
     json = {
         "username": username,
         "add_name": add_name
@@ -28,7 +28,7 @@ def add_contacts(add_name,username):
 
 
 class Contacts(QWidget, Ui_Contacts_Form):
-    def __init__(self,username):
+    def __init__(self, username):
         super().__init__()
 
         self.username = username
@@ -37,13 +37,15 @@ class Contacts(QWidget, Ui_Contacts_Form):
         input_json = {
             "username": self.username
         }
-        stands = json.loads(myUtil.Post.get_contracts("http://119.188.240.140:22255/chat/post/get_contacts", input_json))
+        stands = json.loads(
+            myUtil.Post.get_contracts("http://119.188.240.140:22255/chat/post/get_contacts", input_json))
         for stand in stands:
             item = QListWidgetItem(stand)
             item.setIcon(QIcon(':/qfluentwidgets/images/logo.png'))
             self.listWidget.addItem(item)
         self.listWidget.itemClicked.connect(self.onItemClicked)
         self.pushButton_add_contact.clicked.connect(self.showDialog_add_contact)
+        self.pushButton_del_contact.clicked.connect(self.del_contacts)
         self.listWidget.setAlternatingRowColors(True)
         self.listWidget.setAlternatingRowColors(True)
         self.setStyleSheet("Contacts{background: rgb(249, 249, 249)} ")
@@ -52,10 +54,21 @@ class Contacts(QWidget, Ui_Contacts_Form):
     def onItemClicked(self, item: QListWidgetItem):
         self.open_message_box(item.text())
 
+    def change_font_color(self, match_text):
+        # 遍历所有项
+        color = QColor(0, 0, 128, 128)
+        for i in range(self.listWidget.count()):
+            item = self.listWidget.item(i)
+            if item.text() == match_text:
+                item.setForeground(QBrush(color))
+
+    def del_contacts(self):
+        self.change_font_color("abby")
+
     def showDialog_add_contact(self):
         dialog = CustomMessageBox(self)
         if dialog.exec():
-            if add_contacts(dialog.urlLineEdit.text(),self.username):
+            if add_contacts(dialog.urlLineEdit.text(), self.username):
                 MessageBox("添加成功", "添加好友成功", self).show()
                 item = QListWidgetItem(dialog.urlLineEdit.text())
                 item.setIcon(QIcon(':/qfluentwidgets/images/logo.png'))
@@ -116,18 +129,18 @@ class File(QWidget, Ui_FILE):
                                                   options=options)
         if fileName:  # 如果用户指定了文件名
             self.saveFilePath = fileName  # 存储文件路径
-            self.startDownload(self.saveFilePath,filename)  # 启动下载过程（示例中未实现）
+            self.startDownload(self.saveFilePath, filename)  # 启动下载过程（示例中未实现）
 
     @Slot(FileListItem)
     def onItemClicked(self, item: FileListItem):
         self.chooseSaveLocation(item.filename)
 
-    def startDownload(self, filePath,filename):
+    def startDownload(self, filePath, filename):
         # 这里可以添加实际的下载文件逻辑
         # 假设下载成功，可以给用户一个提示
         MessageBox("Download", f"File will be saved to: {filePath}", self).show()
 
-        url = "http://119.188.240.140:22255/chat/download/"+filename
+        url = "http://119.188.240.140:22255/chat/download/" + filename
         response = requests.get(url, stream=True)
 
         # 检查请求是否成功
@@ -141,6 +154,7 @@ class File(QWidget, Ui_FILE):
             print(f"文件已下载为: {filePath}")
         else:
             print(f"下载失败，状态码：{response.status_code}")
+
 
 class Widget(QFrame):
 
@@ -160,7 +174,7 @@ class Widget(QFrame):
 class MainInterface(FluentWindow):
     """ 主界面 """
 
-    def __init__(self,username):
+    def __init__(self, username):
         super().__init__()
         self.username = username
 
@@ -173,7 +187,8 @@ class MainInterface(FluentWindow):
         self.initWindow()
 
         # self.contactsInterface.pushButton_add_contact.clicked.connect()
-    def setUsername(self,username):
+
+    def setUsername(self, username):
         self.username = username
 
     def initNavigation(self):

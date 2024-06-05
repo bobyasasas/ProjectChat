@@ -1,11 +1,7 @@
-import json
-import sys
-from time import sleep
-
 import websockets
 
 from PySide6.QtCore import QThread, Signal
-from PySide6.QtWidgets import QWidget, QApplication, QVBoxLayout
+from PySide6.QtWidgets import QWidget,  QVBoxLayout
 
 from chat import ChatWindow, ChatBubble
 from myUtil import Post
@@ -103,7 +99,7 @@ class UIMessageWindow(QWidget, Ui_Form_message):
     def recv_message(self, message):
         # 确保将接收到的消息追加到文本编辑框中
         for i in message:
-            self.addMessage(i[2], False)  # 假设 textEdit 是 setupUi 中设置的 QTextEdit 控件
+            self.addMessage(i[2], False)
 
     def send_message(self):
         input_json = {
