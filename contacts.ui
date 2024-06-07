@@ -13,53 +13,50 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="widget" native="true">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>100</y>
-     <width>501</width>
-     <height>431</height>
-    </rect>
-   </property>
-   <widget class="PushButton" name="pushButton_del_contact">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>330</y>
-      <width>181</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>删除好友</string>
-    </property>
-   </widget>
-   <widget class="PushButton" name="pushButton_add_contact">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>220</y>
-      <width>181</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>添加好友</string>
-    </property>
-   </widget>
-  </widget>
   <widget class="ListWidget" name="listWidget">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>20</y>
-     <width>281</width>
-     <height>519</height>
+     <x>20</x>
+     <y>40</y>
+     <width>411</width>
+     <height>531</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true"/>
+  </widget>
+  <widget class="PushButton" name="pushButton_add_contact">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>50</y>
+     <width>160</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>15</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>add freinds</string>
+   </property>
+  </widget>
+  <widget class="PushButton" name="pushButton_del_contact">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>140</y>
+     <width>160</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>15</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>delete contact</string>
    </property>
   </widget>
  </widget>

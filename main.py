@@ -1,3 +1,4 @@
+import os
 import sys
 from PySide6.QtGui import QIcon, QCloseEvent
 from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget
@@ -38,6 +39,7 @@ class MainWindow(QMainWindow):
         self.resize(396, 501)
         self.setWindowIcon(QIcon(':/qfluentwidgets/images/logo.png'))
         self.setWindowTitle('Kchat')
+        self.sign_interface.lineEdit_passwd.returnPressed.connect(self.signin)
 
     def on_go_to_login_interface(self):
         self.stackedWidget.setCurrentIndex(1)
@@ -57,6 +59,7 @@ class MainWindow(QMainWindow):
         json = {
             'username': username,
             'passwd': passwd
+
         }
         if myUtil.Post.get_post("http://119.188.240.140:22255/chat/post/signin", json):
             MessageBox("登录成功", "欢迎登录，" + username, self).show()
@@ -65,6 +68,12 @@ class MainWindow(QMainWindow):
             MessageBox("登录失败", "用户名或者密码错误。", self).show()
 
 
+config_path = os.getenv("LOCALAPPDATA")
+config_path = config_path + "\k-chat\\"
+print(config_path)
+if not os.path.exists(config_path):
+    os.makedirs(config_path)
+    print("config path created")
 app = QApplication([])
 window = MainWindow()
 window.show()

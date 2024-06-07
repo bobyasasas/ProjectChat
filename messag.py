@@ -1,10 +1,14 @@
+import os
+import sys
+
 import websockets
 
-from PySide6.QtCore import QThread, Signal
-from PySide6.QtWidgets import QWidget,  QVBoxLayout
+from PySide6.QtCore import QThread, Signal, QTimer
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QApplication
 
-from chat import ChatWindow, ChatBubble
+from chat import ChatWindow, ChatBubble, BubbleMessage
 from myUtil import Post
+from myUtil.DataBase import Database
 from ui_messages import Ui_Form_message
 
 IP_ADDR = "119.188.240.140"
@@ -89,30 +93,70 @@ class UIMessageWindow(QWidget, Ui_Form_message):
         # 将消息显示区域添加到滚动区域中
         self.scrollArea.setWidget(self.chat_widget)
         self.scrollArea.setWidgetResizable(True)
+        config_path = os.getenv("LOCALAPPDATA")
+        config_path = config_path + "\k-chat\\"
+        path = config_path + self.username + ".db"
+        self.db = Database(path)
+        table_name = self.contact
+        columns = {
+            "message": "TEXT",
+            "is_sender": "INTEGER"  # 假设 is_sender 是一个整数，你可以用它来表示发送者（1）或接收者（0）
+        }
+
+        # 创建表
+        self.db.create_table(table_name, columns)
+        columns_to_select = "message, is_sender"
+        messages = self.db.select(table_name, columns_to_select)
+        for message in messages:
+            self.addMessage(message[0], message[1])
 
     def closeEvent(self, event):
         print("close...")
         self.socket.terminate()  # 首先尝试终止线程
         self.socket.wait()  # 等待线程安全退出
+        self.db.close()
         event.accept()
 
     def recv_message(self, message):
         # 确保将接收到的消息追加到文本编辑框中
         for i in message:
             self.addMessage(i[2], False)
+            data_to_insert = {
+                "message": i[2],
+                "is_sender": 0  # 假设 1 表示消息是发送者发出的
+            }
+            self.db.insert(self.contact, data_to_insert)
 
     def send_message(self):
         input_json = {
             "username": self.username,
             "contact_name": self.contact,
-            "message": self.plainTextEdit.toPlainText()
+            "message": self.textEdit.toPlainText()
         }
         # 假设 Post.get_post 是一个有效的网络请求
         if Post.get_post("http://119.188.240.140:22255/chat/post/send_message", input_json):
-            self.addMessage(self.plainTextEdit.toPlainText(), True)
-            self.plainTextEdit.clear()
+            data_to_insert = {
+                "message": self.textEdit.toPlainText(),
+                "is_sender": 1  # 假设 1 表示消息是发送者发出的
+            }
+            self.db.insert(self.contact, data_to_insert)
+            self.addMessage(self.textEdit.toPlainText(), True)
+            self.textEdit.clear()
 
     def addMessage(self, message, is_sender):
-        chat_bubble = ChatBubble(message, is_sender)
+        chat_bubble = BubbleMessage(message, is_sender)
         self.chat_layout.addWidget(chat_bubble)
-        self.scrollArea.ensureWidgetVisible(chat_bubble, 0)
+
+        # 使用 QTimer 延迟滚动到底部，确保布局更新完成
+        QTimer.singleShot(100, self.scrollToBottom)
+
+    def scrollToBottom(self):
+        # 滚动条可能需要更新，因为它的最大值可能已经改变
+        self.scrollArea.verticalScrollBar().setValue(self.scrollArea.verticalScrollBar().maximum())
+
+
+if __name__ == "__main__":
+    app = QApplication([])
+    window = UIMessageWindow("abby", "kai")
+    window.show()
+    sys.exit(app.exec())

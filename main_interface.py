@@ -3,15 +3,19 @@ import json
 import requests
 from PySide6.QtCore import Slot, QStandardPaths, QThread, Signal
 from PySide6.QtGui import QIcon, Qt, QBrush, QColor
-from PySide6.QtWidgets import QFrame, QHBoxLayout, QWidget, QListWidgetItem, QFileDialog
-from qfluentwidgets import NavigationItemPosition, FluentWindow, SubtitleLabel, setFont, MessageBox
+from PySide6.QtWidgets import QFrame, QHBoxLayout, QWidget, QListWidgetItem, QFileDialog, QVBoxLayout
+from plyer import notification
+from qfluentwidgets import NavigationItemPosition, FluentWindow, SubtitleLabel, setFont, MessageBox, TeachingTip, \
+    InfoBarIcon, TeachingTipTailPosition, PopupTeachingTip, BodyLabel, PrimaryPushButton, FlyoutViewBase
 from qfluentwidgets import FluentIcon as FIF
 
 import myUtil.Post
 from dialog import CustomMessageBox
 from file import FileUploadWindow
+from func import Func
 from messag import UIMessageWindow
 from myUtil import Post
+from plt import Plt
 from ui_contacts import Ui_Contacts_Form
 from ui_file import Ui_FILE
 
@@ -27,6 +31,11 @@ def add_contacts(add_name, username):
         return False
 
 
+
+    def paintEvent(self, e):
+        pass
+
+
 class Contacts(QWidget, Ui_Contacts_Form):
     def __init__(self, username):
         super().__init__()
@@ -39,28 +48,61 @@ class Contacts(QWidget, Ui_Contacts_Form):
         }
         stands = json.loads(
             myUtil.Post.get_contracts("http://119.188.240.140:22255/chat/post/get_contacts", input_json))
+        color = QColor(204, 229, 255, 64)
         for stand in stands:
             item = QListWidgetItem(stand)
-            item.setIcon(QIcon(':/qfluentwidgets/images/logo.png'))
+            item.setIcon(QIcon(FIF.FEEDBACK.icon()))
             self.listWidget.addItem(item)
+            item.setBackground(QBrush(color))
         self.listWidget.itemClicked.connect(self.onItemClicked)
         self.pushButton_add_contact.clicked.connect(self.showDialog_add_contact)
         self.pushButton_del_contact.clicked.connect(self.del_contacts)
         self.listWidget.setAlternatingRowColors(True)
         self.listWidget.setAlternatingRowColors(True)
         self.setStyleSheet("Contacts{background: rgb(249, 249, 249)} ")
+        self.check = CheckThread(self.username)
+        self.check.check_received.connect(self.check_update)
+        self.check.start()
+
+    def showBottomTip(self,usr):
+        TeachingTip.create(
+            target=self.listWidget,
+            icon=InfoBarIcon.SUCCESS,
+            title='new messages',
+            content="You have new messages from:"+usr,
+            isClosable=True,
+            tailPosition=TeachingTipTailPosition.TOP,
+            duration=10000,
+            parent=self
+        )
+
+    def closeEvent(self, event):
+        print("close...")
+        self.check.terminate()  # 首先尝试终止线程
+        self.check.wait()  # 等待线程安全退出
+        event.accept()
 
     @Slot(QListWidgetItem)
     def onItemClicked(self, item: QListWidgetItem):
+        color = QColor(204, 229, 255, 64)
+        item.setBackground(QBrush(color))
         self.open_message_box(item.text())
+
+    def check_update(self, new_message_name):
+        names = " "
+        for name in new_message_name:
+            print(name[0])
+            self.change_font_color(name[0])
+            names = names + name[0] + " "
+        self.showBottomTip(names)
 
     def change_font_color(self, match_text):
         # 遍历所有项
-        color = QColor(0, 0, 128, 128)
+        color = QColor(102, 255, 102, 80)
         for i in range(self.listWidget.count()):
             item = self.listWidget.item(i)
             if item.text() == match_text:
-                item.setForeground(QBrush(color))
+                item.setBackground(QBrush(color))
 
     def del_contacts(self):
         self.change_font_color("abby")
@@ -70,9 +112,11 @@ class Contacts(QWidget, Ui_Contacts_Form):
         if dialog.exec():
             if add_contacts(dialog.urlLineEdit.text(), self.username):
                 MessageBox("添加成功", "添加好友成功", self).show()
+                color = QColor(204, 229, 255, 64)
                 item = QListWidgetItem(dialog.urlLineEdit.text())
-                item.setIcon(QIcon(':/qfluentwidgets/images/logo.png'))
+                item.setIcon(QIcon(FIF.FEEDBACK.icon()))
                 self.listWidget.addItem(item)
+                item.setBackground(QBrush(color))
             else:
                 MessageBox("添加失败", "添加好友失败,已添加或用户不存在", self).show()
 
@@ -89,7 +133,7 @@ class FileListItem(QListWidgetItem):
 
 
 class CheckThread(QThread):
-    message_received = Signal(list)
+    check_received = Signal(list)
 
     def __init__(self, username):
         super().__init__()
@@ -106,7 +150,7 @@ class CheckThread(QThread):
             # 假设 Post.get_contracts 是一个有效的网络请求
             new_message_name = Post.get_contracts("http://119.188.240.140:22255/chat/post/check_message", input_json)
             if new_message_name:
-                self.message_received.emit(new_message_name)  # 发出信号传递消息
+                self.check_received.emit(new_message_name)  # 发出信号传递消息
                 print("Message received from:", new_message_name)  # 打印接收到的消息
 
 
@@ -135,7 +179,7 @@ class File(QWidget, Ui_FILE):
             item = FileListItem(stand[0], stand[1])
             text = item.filename + "      " + item.filesize
             item.setText(text)
-            item.setIcon(QIcon(':/qfluentwidgets/images/logo.png'))
+            item.setIcon(FIF.DOCUMENT.icon())
             self.listWidget.addItem(item)
 
     def chooseSaveLocation(self, filename):
@@ -203,8 +247,8 @@ class MainInterface(FluentWindow):
         # 创建子界面，实际使用时将 Widget 换成自己的子界面
         self.contactsInterface = Contacts(self.username)
         self.transmitInterface = File()
-        self.analyzeInterface = Widget('analyze Interface', self)
-        self.profileInterface = Widget('profile Interface', self)
+        self.analyzeInterface = Func()
+        self.profileInterface = Plt()
         self.initNavigation()
         self.initWindow()
 
@@ -217,9 +261,9 @@ class MainInterface(FluentWindow):
         self.addSubInterface(self.contactsInterface, FIF.PEOPLE, 'Contacts')
         self.addSubInterface(self.transmitInterface, FIF.SEND_FILL, 'Transmit file')
         self.addSubInterface(self.analyzeInterface, FIF.UPDATE, 'Analyze')
-        self.addSubInterface(self.profileInterface, FIF.VIEW, 'Profile', NavigationItemPosition.BOTTOM)
+        self.addSubInterface(self.profileInterface, FIF.CLOUD, 'Manage', NavigationItemPosition.BOTTOM)
 
     def initWindow(self):
         self.resize(900, 600)
-        self.setWindowIcon(QIcon(':/qfluentwidgets/images/logo.png'))
+        self.setWindowIcon(QIcon(FIF.HOME_FILL.icon()))
         self.setWindowTitle('Kchat')

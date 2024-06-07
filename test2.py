@@ -1,43 +1,45 @@
 import sys
-from PySide6.QtWidgets import QApplication, QMainWindow, QListWidget, QListWidgetItem
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QBrush, QColor
-from qfluentwidgets import ListWidget
+from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.init_ui()
+        self.initUI()
 
-    def init_ui(self):
-        # 创建 QListWidget
-        self.list_widget = ListWidget(self)
-        self.setCentralWidget(self.list_widget)
+    def initUI(self):
+        self.setWindowTitle("Pie Chart Example")
+        self.setGeometry(100, 100, 400, 300)
 
-        # 添加一些 QListWidgetItem
-        for i in range(5):
-            item = QListWidgetItem(self.list_widget)
-            item.setText(f"Item {i + 1}")
+        # 创建一个 matplotlib 图表
+        self.figure = Figure()
+        self.pieChart = self.figure.add_subplot(111)
 
-        # 修改特定 QListWidgetItem 的颜色
-        self.modify_item_color("Item 2", QColor(0, 128, 128, 64))
+        # 准备饼图数据
+        labels = ['abby', 'ceil', 'kai', 'jyj']
+        sizes = [215, 130, 245, 210]
+        colors = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue']
 
-    def modify_item_color(self, text, color):
-        # 遍历 QListWidget 中的所有项
-        for i in range(self.list_widget.count()):
-            item = self.list_widget.item(i)
-            if item.text() == text:
-                # 设置前景颜色
-                item.setForeground(QBrush(color))
+        # 确保 explode 列表的长度与 sizes 列表相同
+        explode = [0.1 if i == 0 else 0 for i in range(len(sizes))]
+
+        # 绘制饼图
+        self.pieChart.pie(sizes, explode=explode, labels=labels, colors=colors,
+                          autopct='%1.1f%%', shadow=True, startangle=90)
+
+        # 隐藏图表的坐标轴
+        self.pieChart.axis('equal')
+
+        # 创建一个 FigureCanvas 并将其添加到 PyQt6 布局中
+        self.canvas = FigureCanvas(self.figure)
+        layout = QVBoxLayout()
+        layout.addWidget(self.canvas)
+
+        widget = QWidget()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)
 
 
-def main():
-    app = QApplication(sys.argv)
-    main_window = MainWindow()
-    main_window.show()
-    sys.exit(app.exec())
 
-
-if __name__ == "__main__":
-    main()

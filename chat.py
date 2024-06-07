@@ -1,7 +1,71 @@
 import sys
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton
-from PySide6.QtCore import Qt, QRect
+
+from PySide6 import QtGui
+from PySide6.QtGui import QColor, QPixmap, QPainter, QPolygon, QFontMetrics, QFont
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton, \
+    QSizePolicy, QSpacerItem
+from PySide6.QtCore import Qt, QRect, QSize, Signal
 from qfluentwidgets import ScrollArea
+from qfluentwidgets.components.widgets.acrylic_label import AcrylicLabel
+
+
+class TextMessage(QLabel):
+    heightSingal = Signal(int)
+
+    def __init__(self, text, is_send=False, parent=None):
+        super(TextMessage, self).__init__(text, parent)
+        font = QFont('微软雅黑', 12)
+        self.setFont(font)
+        self.setWordWrap(True)
+        self.setMaximumWidth(800)
+        self.setMinimumWidth(100)
+        self.setMinimumHeight(45)
+        self.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+        if is_send:
+            self.setAlignment(Qt.AlignCenter | Qt.AlignRight)
+            self.setStyleSheet(
+                '''
+                background-color:#b2e281;
+                border-radius:10px;
+                padding:10px;
+                '''
+            )
+        else:
+            self.setStyleSheet(
+                '''
+                background-color:white;
+                border-radius:10px;
+                padding:10px;
+                '''
+            )
+        font_metrics = QFontMetrics(font)
+        rect = font_metrics.boundingRect(text)
+        self.setMaximumWidth(rect.width() + 30)
+
+
+class BubbleMessage(QWidget):
+    def __init__(self, message, is_send=False, parent=None):
+        super().__init__(parent)
+        self.isSend = is_send
+        # self.set
+        self.setStyleSheet(
+            '''
+            border:none;
+            '''
+        )
+        layout = QHBoxLayout()
+        layout.setSpacing(0)
+        layout.setContentsMargins(0, 5, 5, 5)
+        self.message = TextMessage(message, is_send)
+        self.spacerItem = QSpacerItem(45 + 6, 45, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        if is_send:
+            layout.addItem(self.spacerItem)
+            layout.addWidget(self.message, 1)
+        else:
+            layout.addWidget(self.message, 1)
+            layout.addItem(self.spacerItem)
+        self.setLayout(layout)
 
 
 class ChatBubble(QWidget):
@@ -54,7 +118,7 @@ class ChatWindow(QWidget):
 
         # 将消息显示区域添加到滚动区域中
         self.scroll_area.setWidget(self.chat_widget)
-        #self.scroll_area.ensureVisible(-100,-100)
+        # self.scroll_area.ensureVisible(-100,-100)
 
         # 初始化一些示例消息
         self.addMessage("Hello, how are you?", is_sender=False)
@@ -73,5 +137,3 @@ class ChatWindow(QWidget):
         chat_bubble = ChatBubble(message, is_sender)
         self.chat_layout.addWidget(chat_bubble)
         self.scroll_area.ensureWidgetVisible(chat_bubble, 0)
-
-
