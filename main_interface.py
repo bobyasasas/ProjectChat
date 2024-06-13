@@ -1,10 +1,10 @@
 import json
 
 import requests
+from PySide6 import QtGui
 from PySide6.QtCore import Slot, QStandardPaths, QThread, Signal
 from PySide6.QtGui import QIcon, Qt, QBrush, QColor
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QWidget, QListWidgetItem, QFileDialog, QVBoxLayout
-from plyer import notification
 from qfluentwidgets import NavigationItemPosition, FluentWindow, SubtitleLabel, setFont, MessageBox, TeachingTip, \
     InfoBarIcon, TeachingTipTailPosition, PopupTeachingTip, BodyLabel, PrimaryPushButton, FlyoutViewBase
 from qfluentwidgets import FluentIcon as FIF
@@ -29,8 +29,6 @@ def add_contacts(add_name, username):
         return True
     else:
         return False
-
-
 
     def paintEvent(self, e):
         pass
@@ -64,12 +62,12 @@ class Contacts(QWidget, Ui_Contacts_Form):
         self.check.check_received.connect(self.check_update)
         self.check.start()
 
-    def showBottomTip(self,usr):
+    def showBottomTip(self, usr):
         TeachingTip.create(
             target=self.listWidget,
             icon=InfoBarIcon.SUCCESS,
             title='new messages',
-            content="You have new messages from:"+usr,
+            content="You have new messages from:" + usr,
             isClosable=True,
             tailPosition=TeachingTipTailPosition.TOP,
             duration=10000,
@@ -247,8 +245,8 @@ class MainInterface(FluentWindow):
         # 创建子界面，实际使用时将 Widget 换成自己的子界面
         self.contactsInterface = Contacts(self.username)
         self.transmitInterface = File()
-        self.analyzeInterface = Func()
-        self.profileInterface = Plt()
+        self.analyzeInterface = Plt()
+        self.profileInterface = Func()
         self.initNavigation()
         self.initWindow()
 
@@ -265,5 +263,6 @@ class MainInterface(FluentWindow):
 
     def initWindow(self):
         self.resize(900, 600)
-        self.setWindowIcon(QIcon(FIF.HOME_FILL.icon()))
+        icon = QtGui.QIcon("k-chat.ico")
+        self.setWindowIcon(icon)
         self.setWindowTitle('Kchat')

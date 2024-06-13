@@ -1,5 +1,3 @@
-import sys
-
 from PySide6.QtCore import QUrl
 from qfluentwidgets import MessageBoxBase, SubtitleLabel, LineEdit
 

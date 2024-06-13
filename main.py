@@ -1,5 +1,7 @@
 import os
 import sys
+
+from PySide6 import QtGui
 from PySide6.QtGui import QIcon, QCloseEvent
 from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget
 from qfluentwidgets import MessageBox
@@ -37,7 +39,8 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.stackedWidget)
         self.resize(396, 501)
-        self.setWindowIcon(QIcon(':/qfluentwidgets/images/logo.png'))
+        icon = QtGui.QIcon("k-chat.ico")
+        self.setWindowIcon(icon)
         self.setWindowTitle('Kchat')
         self.sign_interface.lineEdit_passwd.returnPressed.connect(self.signin)
 

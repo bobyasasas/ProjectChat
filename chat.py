@@ -1,12 +1,8 @@
-import sys
-
-from PySide6 import QtGui
-from PySide6.QtGui import QColor, QPixmap, QPainter, QPolygon, QFontMetrics, QFont
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea, QPushButton, \
-    QSizePolicy, QSpacerItem
-from PySide6.QtCore import Qt, QRect, QSize, Signal
+from PySide6.QtGui import QFontMetrics, QFont
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel,QSizePolicy, QSpacerItem
+from PySide6.QtCore import Qt, QRect, Signal
 from qfluentwidgets import ScrollArea
-from qfluentwidgets.components.widgets.acrylic_label import AcrylicLabel
+
 
 
 class TextMessage(QLabel):
