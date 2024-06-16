@@ -3,7 +3,9 @@ import sys
 from PySide6.QtGui import QDesktopServices
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget
 from PySide6.QtCore import QUrl
+from qfluentwidgets import MessageBox
 
+from myUtil import Post
 from ui_func import Ui_Form_func
 
 
@@ -28,11 +30,15 @@ class Func(QMainWindow, Ui_Form_func):
         QDesktopServices.openUrl(url)
 
     def open_sqoop(self):
-        url = QUrl("https://www.example.com")
+        url = QUrl("http://119.188.240.140:51170/explorer.html#/sqoop/backup")
         QDesktopServices.openUrl(url)
 
     def backup(self):
-        pass
+        json = {
+            'sqoop': 'sqoop'
+        }
+        Post.get_post("http://119.188.240.140:22255/chat/post/sqoop",json)
+        MessageBox("success", "successfully backup mysql to hadoop。", self).show()
 
 
 if __name__ == "__main__":
