@@ -8,16 +8,18 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication,
-                            QMetaObject, QRect,
-                            QSize, Qt)
-from PySide6.QtGui import (QFont)
-from PySide6.QtWidgets import (QFrame, QHBoxLayout, QLineEdit,
-                               QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLineEdit,
+    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 
 from qfluentwidgets import (CaptionLabel, LineEdit, PasswordLineEdit, PrimaryPushButton,
-                            TransparentPushButton)
-
+    TransparentPushButton)
 
 class Ui_login_window(object):
     def setupUi(self, login_window):
@@ -56,17 +58,20 @@ class Ui_login_window(object):
 
         self.verticalLayout.addWidget(self.line)
 
+
         self.horizontalLayout_2.addLayout(self.verticalLayout)
 
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
 
+
         self.verticalLayout_5.addLayout(self.horizontalLayout_2)
 
         self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_5.addItem(self.verticalSpacer_3)
+
 
         self.verticalLayout_6.addLayout(self.verticalLayout_5)
 
@@ -116,7 +121,9 @@ class Ui_login_window(object):
 
         self.verticalLayout_2.addWidget(self.lineEdit_passwd_confirm)
 
+
         self.verticalLayout_3.addLayout(self.verticalLayout_2)
+
 
         self.verticalLayout_4.addLayout(self.verticalLayout_3)
 
@@ -144,6 +151,7 @@ class Ui_login_window(object):
 
         self.verticalLayout_4.addItem(self.verticalSpacer_4)
 
+
         self.verticalLayout_6.addLayout(self.verticalLayout_4)
 
         self.horizontalLayout = QHBoxLayout()
@@ -157,34 +165,32 @@ class Ui_login_window(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
+
         self.verticalLayout_6.addLayout(self.horizontalLayout)
+
 
         self.retranslateUi(login_window)
 
         QMetaObject.connectSlotsByName(login_window)
-
     # setupUi
 
     def retranslateUi(self, login_window):
         login_window.setWindowTitle(QCoreApplication.translate("login_window", u"\u6ce8\u518c", None))
-        self.label.setText(QCoreApplication.translate("login_window", u"\u6ce8\u518c", None))
-        # if QT_CONFIG(tooltip)
-        self.lineEdit_username.setToolTip(
-            QCoreApplication.translate("login_window", u"\u8bf7\u8f93\u5165\u8d26\u53f7", None))
-        # endif // QT_CONFIG(tooltip)
-        # if QT_CONFIG(statustip)
+        self.label.setText(QCoreApplication.translate("login_window", u"LOGIN", None))
+#if QT_CONFIG(tooltip)
+        self.lineEdit_username.setToolTip(QCoreApplication.translate("login_window", u"\u8bf7\u8f93\u5165\u8d26\u53f7", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(statustip)
         self.lineEdit_username.setStatusTip("")
-        # endif // QT_CONFIG(statustip)
+#endif // QT_CONFIG(statustip)
         self.lineEdit_username.setInputMask("")
         self.lineEdit_username.setText("")
-        self.lineEdit_username.setPlaceholderText(
-            QCoreApplication.translate("login_window", u"\u8bf7\u8f93\u5165\u8d26\u53f7", None))
+        self.lineEdit_username.setPlaceholderText(QCoreApplication.translate("login_window", u"enter username", None))
         self.lineEdit_passwd.setText("")
-        self.lineEdit_passwd.setPlaceholderText(
-            QCoreApplication.translate("login_window", u"\u8bf7\u8f93\u5165\u5bc6\u7801", None))
+        self.lineEdit_passwd.setPlaceholderText(QCoreApplication.translate("login_window", u"enter password", None))
         self.lineEdit_passwd_confirm.setText("")
-        self.lineEdit_passwd_confirm.setPlaceholderText(
-            QCoreApplication.translate("login_window", u"\u8bf7\u786e\u8ba4\u5bc6\u7801", None))
-        self.pushButton_login.setText(QCoreApplication.translate("login_window", u"\u6ce8\u518c", None))
-        self.pushButton_signin.setText(QCoreApplication.translate("login_window", u"\u8fd4\u56de\u767b\u5f55", None))
+        self.lineEdit_passwd_confirm.setPlaceholderText(QCoreApplication.translate("login_window", u"please confirm passwd", None))
+        self.pushButton_login.setText(QCoreApplication.translate("login_window", u"Login", None))
+        self.pushButton_signin.setText(QCoreApplication.translate("login_window", u"back", None))
     # retranslateUi
+

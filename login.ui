@@ -227,7 +227,7 @@
              <enum>QLineEdit::EchoMode::Password</enum>
             </property>
             <property name="placeholderText">
-             <string>请确认密码</string>
+             <string>please confirm passwd</string>
             </property>
            </widget>
           </item>
@@ -282,7 +282,7 @@
          </font>
         </property>
         <property name="text">
-         <string>注册</string>
+         <string>Login</string>
         </property>
        </widget>
       </item>
@@ -306,7 +306,7 @@
       <item>
        <widget class="TransparentPushButton" name="pushButton_signin">
         <property name="text">
-         <string>返回登录</string>
+         <string>back</string>
         </property>
        </widget>
       </item>

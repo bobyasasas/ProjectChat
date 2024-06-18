@@ -65,10 +65,10 @@ class MainWindow(QMainWindow):
 
         }
         if myUtil.Post.get_post("http://119.188.240.140:22255/chat/post/signin", json):
-            MessageBox("登录成功", "欢迎登录，" + username, self).show()
+            MessageBox("success", "welcome ，" + username, self).show()
             self.login_success(username)
         else:
-            MessageBox("登录失败", "用户名或者密码错误。", self).show()
+            MessageBox("fail", "unknown username or password。", self).show()
 
 
 config_path = os.getenv("LOCALAPPDATA")
